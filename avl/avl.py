@@ -1,3 +1,5 @@
+from collections import deque
+
 class Node:
     def __init__(self, key):
         self.key = key
@@ -83,3 +85,29 @@ class AVL:
         A.height = 1 + max(self.get_height(X), self.get_height(B))
 
         return A
+    
+    def print_tree(self):
+        if not self.root:
+            print('\nTree is empty!')
+            return
+
+        level_order = ''
+        with_details = ''
+        q = deque([self.root])
+        while q:
+            level = []
+            for _ in range(len(q)):
+                node = q.popleft()
+                if node:
+                    level.append(str(node.key))
+                    with_details += f'{node.key}'.ljust(5) + f'h = {self.get_height(node)}, b = {self.get_balance_factor(node)}\n'
+                    q.append(node.left)
+                    q.append(node.right)
+                else:
+                    level.append('n')
+            level_order += ' '.join(level) + '\n'
+
+        print('\nLevel Order Traversal:')
+        print(level_order)
+        print('Level Order Traversal with Height and Balance Factor:')
+        print(with_details)

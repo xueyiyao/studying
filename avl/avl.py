@@ -17,7 +17,13 @@ class AVL:
     def get_balance_factor(self, node: Node) -> int:
         return 0 if not node else (self.get_height(node.left) - self.get_height(node.right))
     
-    def search(self, key) -> Node:
+    def search(self, key) -> bool:
+        return True if self.search_helper(key) else False
+    
+    def insert(self, key) -> None:
+        self.root = self.insert_helper(self.root, key)
+    
+    def search_helper(self, key) -> Node:
         p = self.root
         while p and p.key != key:
             if key < p.key:
@@ -26,13 +32,13 @@ class AVL:
                 p = p.right
         return p
 
-    def insert(self, root: Node, key) -> Node:
+    def insert_helper(self, root: Node, key) -> Node:
         if not root:
             return Node(key)
         elif key < root.key:
-            root.left = self.insert(root.left, key)
+            root.left = self.insert_helper(root.left, key)
         else:
-            root.right = self.insert(root.right, key)
+            root.right = self.insert_helper(root.right, key)
         
         # height
         root.height = 1 + max(self.get_height(root.left), self.get_height(root.right))
